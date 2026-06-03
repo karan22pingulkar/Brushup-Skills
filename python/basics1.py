@@ -167,3 +167,21 @@ nums = [5, 8, 3, 9, 2]
 
 for i in range(len(nums)-1):
     print(nums[i+1]-nums[i])
+
+
+user_choice = int(input("enter number :"))
+
+if user_choice <= 1:
+    print("not prime")
+else:
+    is_prime = True  # Assume it is prime at the start
+
+    for i in range(2, user_choice):
+        if user_choice % i == 0:
+            is_prime = False  # Found a factor, so it's NOT prime
+            break  # Stop checking immediately
+
+    if is_prime:
+        print("prime")
+    else:
+        print("not prime")
