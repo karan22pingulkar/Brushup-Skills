@@ -194,3 +194,19 @@ for i in range(len(nums)):
     for j in range(i+1, len(nums)):
         if nums[i] == nums[j]:
             print("Duplicate Found")
+
+# Using nested loops, check if the list contains any duplicate values  using break statement if we found any one duplciate we stop.
+nums = [5, 8, 3, 5, 6, 5]
+found = False
+for i in range(len(nums)):
+    for j in range(i+1, len(nums)):
+        if nums[i] == nums[j]:
+            found = True
+            break
+    if found:
+        break
+
+if found:
+    print("Duplicate Found using")
+else:
+    print("No Duplicate")
