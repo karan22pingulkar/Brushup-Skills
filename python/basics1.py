@@ -174,14 +174,23 @@ user_choice = int(input("enter number :"))
 if user_choice <= 1:
     print("not prime")
 else:
-    is_prime = True  # Assume it is prime at the start
+    is_prime = True
 
     for i in range(2, user_choice):
         if user_choice % i == 0:
-            is_prime = False  # Found a factor, so it's NOT prime
-            break  # Stop checking immediately
+            is_prime = False
+            break
 
     if is_prime:
         print("prime")
     else:
         print("not prime")
+
+print("# ------------------------------------------------------------------------------")
+# Using nested loops, check if the list contains any duplicate values.
+nums = [5, 8, 3, 5]
+
+for i in range(len(nums)):
+    for j in range(i+1, len(nums)):
+        if nums[i] == nums[j]:
+            print("Duplicate Found")
