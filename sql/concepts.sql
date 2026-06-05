@@ -1,0 +1,2 @@
+-- char_length('🔥') = 1 (Because it is 1 character to a human)
+-- length('🔥') = 4 (Because it takes 4 bytes of computer storage)
