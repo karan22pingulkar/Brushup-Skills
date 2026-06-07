@@ -33,3 +33,6 @@ WHERE city NOT LIKE 'a%'
 SELECT name from students where 
 marks > 75 ORDER BY
 right (name,3)  ASC,id ASC
+
+
+like ,not like, regexp '^[]',regexp '[]$' ,right(columnname,how_mamny_characters) ,left (columnname,how_mamny_characters ) ,SUBSTRING(column, start_position, number_of_characters)
