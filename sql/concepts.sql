@@ -36,3 +36,17 @@ right (name,3)  ASC,id ASC
 
 
 like ,not like, regexp '^[]',regexp '[]$' ,right(columnname,how_mamny_characters) ,left (columnname,how_mamny_characters ) ,SUBSTRING(column, start_position, number_of_characters)
+
+
+-- euclidean formula
+
+-- MIN() and MAX(): Retrieve the boundary values from the table columns.
+-- POWER(expression, 2): Squares the differences.
+-- SQRT(): Computes the square root of the sum.
+-- ROUND(expression, 4): Formats the final value to show 4 decimal digits
+SELECT ROUND(
+    SQRT(
+        POWER(MAX(LAT_N) - MIN(LAT_N), 2) + 
+        POWER(MAX(LONG_W) - MIN(LONG_W), 2)
+    ), 4)
+FROM STATION;
