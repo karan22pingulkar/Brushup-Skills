@@ -1,0 +1,68 @@
+append()
+extend()
+insert()
+remove()
+sort()
+reverse()
+these method in python return none 
+
+e.g. code:
+
+a = [1, 2, 3]
+b = a.append(4)
+print(b)
+
+methods in python that return something
+count()
+Returns the number of occurrences.
+nums = [1, 1, 2, 1]
+
+result = nums.count(1)
+
+print(result)
+
+get()
+
+Returns the value for a dictionary key.
+d = {"name": "John"}
+
+result = d.get("name")
+
+print(result)
+output :
+John
+
+
+
+Returns the position of the first occurrence.
+| Method     | Returns                            |
+| ---------- | ---------------------------------- |
+| `sorted()` | New sorted list                    |
+| `pop()`    | Removed element                    |
+| `get()`    | Dictionary value (or default/None) |
+| `count()`  | Number of occurrences              |
+| `index()`  | Position of first occurrence       |
+
+
+Immutable:
+
+Objects whose values cannot be changed after creation.
+int
+float
+str
+tuple
+bool
+frozense
+
+mutable: 
+
+Objects whose values can be changed after creation.
+list
+dict
+set
+bytearray
+
+
+List: Ordered, mutable, allows duplicates.
+Set: Unordered, mutable, does not allow duplicates.
+Dictionary: Stores data in key-value pairs, keys must be unique
