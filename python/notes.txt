@@ -1,10 +1,21 @@
+these method in python return none :
+
 append()
 extend()
 insert()
 remove()
 sort()
 reverse()
-these method in python return none 
+list.append()
+list.extend()
+list.insert()
+list.sort()
+list.reverse()
+list.clear()
+dict.update()
+set.add()
+set.update()
+
 
 e.g. code:
 
