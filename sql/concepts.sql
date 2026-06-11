@@ -156,3 +156,24 @@ inner join packages as f_salary
 on f.friend_id=f_salary.id
 where f_salary.salary > s_salary.salary
 ORDER by f_salary.salary ASC
+
+-- Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
+
+-- Write a query to output all such symmetric pairs in ascending order by the value of X. List the rows such that X1 ≤ Y1.
+-- advanced joins symmetric pairs imp go thtough
+SELECT f1.x, f1.y
+FROM functions f1
+JOIN functions f2 
+    ON f1.x = f2.y AND f1.y = f2.x
+WHERE f1.x < f1.y
+
+UNION 
+
+
+SELECT x, y
+FROM functions
+WHERE x = y
+GROUP BY x, y
+HAVING COUNT(*) > 1
+
+ORDER BY x;
