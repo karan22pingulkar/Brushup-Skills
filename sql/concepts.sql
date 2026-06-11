@@ -76,3 +76,16 @@ SELECT COUNTRY.Continent ,Floor(avg(CITY.Population))
 from country  JOIN
 city on CITY.CountryCode = COUNTRY.Code
 GROUP by COUNTRY.Continent
+
+
+-- very imprtant question --BASIC JOIN REPORT PROBLEM HACKERRANK
+-- we used between as we didnt have any key to join tables and ususlly we use between and operators when we wan to deal with the range of the data available in another refrence table we want to join also we used case stattment  when we use case statements it returns ouput on new column so we have to name it in end part 
+--  CASE statement always creates a brand new column in your output result dataset.It does not overwrite, change, or delete any data in your original tables. Think of it as a calculation that creates a custom, on-the-fly column just for your final report display
+-- The name you put after the END statement (END AS student_name) becomes the header title of this brand new column
+SELECT
+case 
+when grades.grade>=8 then students.name
+else NULL
+end as student_name,grades.grade,students.marks from students join grades 
+on students.marks between grades.min_mark and grades.max_mark 
+order by grades.grade DESC, student_name ASC,students.marks ASC;
