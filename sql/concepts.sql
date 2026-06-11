@@ -160,7 +160,7 @@ ORDER by f_salary.salary ASC
 -- Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
 
 -- Write a query to output all such symmetric pairs in ascending order by the value of X. List the rows such that X1 ≤ Y1.
--- advanced joins symmetric pairs imp go thtough
+-- advanced joins symmetric pairs imp go through
 SELECT f1.x, f1.y
 FROM functions f1
 JOIN functions f2 
@@ -177,3 +177,11 @@ GROUP BY x, y
 HAVING COUNT(*) > 1
 
 ORDER BY x;
+
+-- go through and do
+-- occupations problem hackerank
+-- binary tree nodes sql problem medium
+-- top earner --easy
+-- the blunder --easy
+-- Weather Observation Station 15,16,17
+-- use of CTE with examples why and when to use
