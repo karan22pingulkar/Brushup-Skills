@@ -50,3 +50,14 @@ SELECT ROUND(
         POWER(MAX(LONG_W) - MIN(LONG_W), 2)
     ), 4)
 FROM STATION;
+
+
+
+-- join questions
+-- Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
+
+-- Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+SELECT sum(city.population)
+from city INNER JOIN country
+on CITY.CountryCode = COUNTRY.Code
+WHERE COUNTRY.CONTINENT = 'Asia';
