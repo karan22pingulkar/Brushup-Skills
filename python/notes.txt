@@ -77,3 +77,24 @@ bytearray
 List: Ordered, mutable, allows duplicates.
 Set: Unordered, mutable, does not allow duplicates.
 Dictionary: Stores data in key-value pairs, keys must be unique
+
+python oops:
+# We define a blueprint for a SmartDevice
+class SmartDevice:
+    # The __init__ method is the constructor. It runs automatically when a new object is made.
+    # 'self' refers to the specific object we are creating.
+    def __init__(self, name, battery_level):
+        self.name = name                 # Instance variable: stores the device name
+        self.battery_level = battery_level # Instance variable: stores battery percentage
+
+    # A method (a function inside a class) that represents an action the device can take
+    def status(self):
+        return f"{self.name} has {self.battery_level}% battery left."
+
+# Creating actual objects (instances) from the blueprint
+phone = SmartDevice("iPhone", 85)
+tablet = SmartDevice("iPad", 42)
+
+# Using the objects
+print(phone.status())   # Output: iPhone has 85% battery left.
+print(tablet.status())  # Output: iPad has 42% battery left.
