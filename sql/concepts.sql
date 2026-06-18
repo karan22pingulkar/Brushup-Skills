@@ -206,3 +206,21 @@ from employees GROUP by departments having total >100000
 -- LEFT JOIN
 -- +
 -- WHERE right_table.column IS NULL
+
+-- Greater than average
+-- WHERE salary > (SELECT AVG(salary) FROM employees)
+
+-- -- Maximum salary
+-- WHERE salary = (SELECT MAX(salary) FROM employees)
+
+-- -- Second highest salary
+-- SELECT MAX(salary)
+-- FROM employees
+-- WHERE salary < (SELECT MAX(salary) FROM employees)
+
+-- -- Exists
+-- WHERE customer_id IN (SELECT customer_id FROM customers)
+
+-- -- Missing records
+-- LEFT JOIN ...
+-- WHERE right_table.id IS NULL
