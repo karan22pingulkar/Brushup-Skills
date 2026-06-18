@@ -191,4 +191,18 @@ ORDER BY x;
 -- HAVING -> filters groups AFTER grouping
 select departments , sum(salary) as total 
 from employees GROUP by departments having total >100000
+-- Interview Rule
 
+-- When finding:
+
+-- Missing customers
+-- Missing orders
+-- Missing departments
+-- Orphan records
+-- Records that don't match another table
+
+-- Think:
+
+-- LEFT JOIN
+-- +
+-- WHERE right_table.column IS NULL
