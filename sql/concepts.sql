@@ -185,3 +185,10 @@ ORDER BY x;
 -- the blunder --easy
 -- Weather Observation Station 15,16,17
 -- use of CTE with examples why and when to use
+
+-- WHERE  -> filters rows BEFORE grouping
+
+-- HAVING -> filters groups AFTER grouping
+select departments , sum(salary) as total 
+from employees GROUP by departments having total >100000
+
