@@ -1,0 +1,1556 @@
+```sql
+/*=============================================================================
+MYSQL COMPLETE ROADMAP FOR INTERVIEWS + REAL PROJECTS
+PART 1 : BEGINNER (TOPICS 1 - 17)
+=============================================================================*/
+
+/*=============================================================================
+1. WHAT IS MYSQL?
+=============================================================================*/
+
+/*
+Interview Answer:
+
+MySQL is an open-source Relational Database Management System (RDBMS)
+used to store, manage, and retrieve structured data using SQL
+(Structured Query Language). It organizes data into tables consisting
+of rows and columns and supports relationships between tables.
+
+MySQL is widely used because it is reliable, fast, easy to learn,
+and capable of handling applications ranging from small websites to
+large enterprise systems.
+
+Why We Need It:
+
+Applications need a persistent way to store data. MySQL provides a
+secure and efficient mechanism for storing and retrieving data.
+
+Real Scenario:
+
+An e-commerce application stores customers, products, orders, and
+payments in MySQL tables.
+
+Interview Follow-Up:
+
+Q: Is MySQL a programming language?
+A: No. MySQL is a database management system that uses SQL as its query language.
+
+Q: Is MySQL relational?
+A: Yes. It is a Relational Database Management System (RDBMS).
+*/
+
+CREATE DATABASE ecommerce;
+
+
+/*=============================================================================
+2. DATABASE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+A database is an organized collection of related data stored
+electronically. It allows applications to efficiently store, retrieve,
+update, and manage information.
+
+Databases help maintain consistency, reduce redundancy, and support
+multiple users accessing data simultaneously.
+
+Why We Need It:
+
+Without databases, applications would struggle to manage large amounts
+of data efficiently.
+
+Real Scenario:
+
+Amazon stores millions of product records, customer accounts, orders,
+and inventory details inside databases.
+
+Interview Follow-Up:
+
+Q: Difference between database and table?
+A: A database contains multiple tables. A table stores actual records.
+
+Q: Can one database contain many tables?
+A: Yes.
+*/
+
+CREATE DATABASE company_db;
+
+SHOW DATABASES;
+
+
+/*=============================================================================
+3. TABLE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+A table is the basic storage structure in a relational database. It
+stores data in rows and columns. Each row represents a record and each
+column represents an attribute of that record.
+
+Tables help organize related information in a structured format.
+
+Why We Need It:
+
+Tables make it easy to store and retrieve related information.
+
+Real Scenario:
+
+An Employee table stores employee details such as ID, Name, Salary,
+Department, and Joining Date.
+
+Interview Follow-Up:
+
+Q: What is a row?
+A: A single record in a table.
+
+Q: What is a column?
+A: A specific attribute of the data.
+*/
+
+CREATE TABLE employees (
+   id INT,
+   name VARCHAR(100)
+);
+
+
+/*=============================================================================
+4. DATA TYPES
+=============================================================================*/
+
+/*
+Interview Answer:
+
+Data types define the type of values that can be stored in a column.
+Choosing the correct data type improves storage efficiency, performance,
+and data integrity.
+
+Common Types:
+
+INT         -> Integer values
+BIGINT      -> Large integers
+VARCHAR     -> Variable-length strings
+CHAR        -> Fixed-length strings
+TEXT        -> Large text
+DATE        -> Date only
+DATETIME    -> Date and time
+TIMESTAMP   -> Timestamp values
+DECIMAL     -> Exact numeric values
+FLOAT       -> Approximate numeric values
+DOUBLE      -> Double precision numbers
+BOOLEAN     -> True/False values
+
+Why We Need It:
+
+Data types ensure only valid data is stored.
+
+Real Scenario:
+
+Salary should use DECIMAL instead of VARCHAR to support calculations.
+
+Interview Follow-Up:
+
+Q: Difference between CHAR and VARCHAR?
+A: CHAR has fixed length, VARCHAR has variable length.
+*/
+
+salary DECIMAL(10,2);
+
+
+/*=============================================================================
+5. CREATE DATABASE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+CREATE DATABASE is used to create a new database in MySQL. It provides
+a container for storing tables, views, procedures, and other database
+objects.
+
+Real Scenario:
+
+A company creates a new database when starting a new application or
+project.
+
+Syntax:
+
+CREATE DATABASE database_name;
+*/
+
+CREATE DATABASE company;
+
+
+/*=============================================================================
+6. DROP DATABASE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+DROP DATABASE permanently removes an entire database including all
+tables, views, procedures, and data stored within it.
+
+Why We Need It:
+
+Used when a database is no longer needed.
+
+Warning:
+
+This operation cannot be easily reversed.
+
+Real Scenario:
+
+Removing a test database after project completion.
+*/
+
+DROP DATABASE company;
+
+
+/*=============================================================================
+7. CREATE TABLE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+CREATE TABLE is used to create a new table structure inside a database.
+Columns, constraints, and data types are defined during table creation.
+
+Why We Need It:
+
+Before storing data, a table structure must exist.
+
+Real Scenario:
+
+Creating an Employee table before onboarding employees.
+
+Interview Follow-Up:
+
+Q: Can we define constraints during table creation?
+A: Yes. Primary Key, Foreign Key, Unique, Not Null, etc.
+*/
+
+CREATE TABLE employee(
+   id INT PRIMARY KEY,
+   name VARCHAR(100),
+   salary DECIMAL(10,2)
+);
+
+
+/*=============================================================================
+8. DROP TABLE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+DROP TABLE permanently removes a table and all records stored in it.
+
+Why We Need It:
+
+Used when a table is obsolete or no longer required.
+
+Real Scenario:
+
+Deleting temporary development tables after deployment.
+
+Interview Follow-Up:
+
+Q: Difference between DROP TABLE and TRUNCATE TABLE?
+
+A:
+DROP TABLE removes both structure and data.
+TRUNCATE removes data but keeps structure.
+*/
+
+DROP TABLE employee;
+
+
+/*=============================================================================
+9. TRUNCATE TABLE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+TRUNCATE TABLE removes all rows from a table while preserving the table
+structure. It is generally faster than DELETE because it deallocates
+data pages rather than deleting rows individually.
+
+Why We Need It:
+
+Useful when all records need to be cleared quickly.
+
+Real Scenario:
+
+Clearing staging tables before loading fresh ETL data.
+
+Interview Follow-Up:
+
+Q: Does TRUNCATE remove table structure?
+A: No. It only removes data.
+*/
+
+TRUNCATE TABLE employee;
+
+
+/*=============================================================================
+10. INSERT
+=============================================================================*/
+
+/*
+Interview Answer:
+
+INSERT is used to add new records into a table. It allows applications
+to store new information in the database.
+
+Why We Need It:
+
+Without INSERT, data cannot be added.
+
+Real Scenario:
+
+Adding a newly registered user to the Users table.
+
+Interview Follow-Up:
+
+Q: Can multiple rows be inserted at once?
+A: Yes.
+*/
+
+INSERT INTO employee
+VALUES (1,'John',50000);
+
+
+/*=============================================================================
+11. SELECT
+=============================================================================*/
+
+/*
+Interview Answer:
+
+SELECT is used to retrieve data from one or more tables. It is the most
+commonly used SQL statement and supports filtering, sorting, grouping,
+and joining data.
+
+Why We Need It:
+
+Applications constantly retrieve information from databases.
+
+Real Scenario:
+
+Displaying products on an e-commerce website.
+
+Interview Follow-Up:
+
+Q: What does SELECT * mean?
+A: Retrieve all columns from the table.
+*/
+
+SELECT * FROM employee;
+
+
+/*=============================================================================
+12. WHERE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+The WHERE clause filters records based on specified conditions. Only
+rows satisfying the condition are returned.
+
+Why We Need It:
+
+Allows retrieval of relevant data instead of the entire table.
+
+Real Scenario:
+
+Finding employees earning more than ₹50,000.
+
+Interview Follow-Up:
+
+Q: Can multiple conditions be used?
+A: Yes, using AND and OR operators.
+*/
+
+SELECT *
+FROM employee
+WHERE salary > 50000;
+
+
+/*=============================================================================
+13. ORDER BY
+=============================================================================*/
+
+/*
+Interview Answer:
+
+ORDER BY sorts query results in ascending or descending order. It is
+commonly used when displaying ranked or organized information.
+
+Why We Need It:
+
+Users generally prefer sorted information.
+
+Real Scenario:
+
+Displaying highest-paid employees first.
+
+Interview Follow-Up:
+
+Q: Default sort order?
+A: ASC (Ascending).
+*/
+
+SELECT *
+FROM employee
+ORDER BY salary DESC;
+
+
+/*=============================================================================
+14. LIMIT
+=============================================================================*/
+
+/*
+Interview Answer:
+
+LIMIT restricts the number of rows returned by a query. It is commonly
+used for pagination and performance optimization.
+
+Why We Need It:
+
+Fetching millions of rows is inefficient.
+
+Real Scenario:
+
+Showing only the first 10 products on a page.
+
+Interview Follow-Up:
+
+Q: Can LIMIT be combined with ORDER BY?
+A: Yes, very commonly.
+*/
+
+SELECT *
+FROM employee
+LIMIT 5;
+
+
+/*=============================================================================
+15. DISTINCT
+=============================================================================*/
+
+/*
+Interview Answer:
+
+DISTINCT removes duplicate values from query results and returns only
+unique values.
+
+Why We Need It:
+
+Useful when identifying unique categories, departments, or locations.
+
+Real Scenario:
+
+Getting a list of unique departments in a company.
+
+Interview Follow-Up:
+
+Q: Does DISTINCT remove duplicates from the table?
+A: No. It only affects query output.
+*/
+
+SELECT DISTINCT department
+FROM employee;
+
+
+/*=============================================================================
+16. UPDATE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+UPDATE modifies existing records in a table. It is used whenever stored
+data needs to be corrected or changed.
+
+Why We Need It:
+
+Business data changes frequently.
+
+Real Scenario:
+
+Updating an employee's salary after promotion.
+
+Interview Follow-Up:
+
+Q: What happens if WHERE is omitted?
+A: All rows are updated.
+*/
+
+UPDATE employee
+SET salary = 60000
+WHERE id = 1;
+
+
+/*=============================================================================
+17. DELETE
+=============================================================================*/
+
+/*
+Interview Answer:
+
+DELETE removes one or more records from a table. Unlike TRUNCATE, it can
+remove specific rows using conditions.
+
+Why We Need It:
+
+Applications often need to remove obsolete or incorrect data.
+
+Real Scenario:
+
+Deleting inactive user accounts.
+
+Interview Follow-Up:
+
+Q: Difference between DELETE and TRUNCATE?
+
+A:
+DELETE removes rows one by one and can use WHERE.
+TRUNCATE removes all rows quickly and does not support WHERE.
+*/
+
+DELETE FROM employee
+WHERE id = 1;
+
+
+/*=============================================================================
+END OF PART 1 (TOPICS 1-17)
+=============================================================================*/
+```
+/*=============================================================================
+MYSQL COMPLETE ROADMAP FOR INTERVIEWS + REAL PROJECTS
+PART 2 : INTERMEDIATE (TOPICS 18 - 39)
+=============================================================================*/
+
+/*=============================================================================
+18. PRIMARY KEY
+=============================================================================*/
+
+CREATE TABLE Employee(
+    EmployeeID INT PRIMARY KEY,
+    Name VARCHAR(100)
+);
+
+/*
+Interview Answer:
+A Primary Key uniquely identifies each record in a table. It ensures no duplicate or NULL values exist and is used to maintain data integrity.
+
+Why We Need It:
+To uniquely identify every row and establish relationships between tables.
+
+Real Scenario:
+EmployeeID is used to uniquely identify each employee in HR systems.
+
+Follow-Up:
+Q: Can a table have multiple primary keys?
+A: No, but it can have a composite primary key.
+*/
+
+
+/*=============================================================================
+19. FOREIGN KEY
+=============================================================================*/
+
+CREATE TABLE Orders(
+    OrderID INT PRIMARY KEY,
+    CustomerID INT,
+    FOREIGN KEY(CustomerID)
+    REFERENCES Customers(CustomerID)
+);
+
+/*
+Interview Answer:
+A Foreign Key creates a relationship between two tables by referencing the primary key of another table.
+
+Why We Need It:
+To maintain referential integrity and prevent invalid data entries.
+
+Real Scenario:
+Every order must belong to a valid customer in an e-commerce system.
+
+Follow-Up:
+Q: What happens if referenced data is missing?
+A: MySQL throws a foreign key constraint error.
+*/
+
+
+/*=============================================================================
+20. UNIQUE CONSTRAINT
+=============================================================================*/
+
+CREATE TABLE Users(
+    Email VARCHAR(100) UNIQUE
+);
+
+/*
+Interview Answer:
+Ensures all values in a column are unique.
+
+Why We Need It:
+To prevent duplicate entries like duplicate emails.
+
+Real Scenario:
+User email must be unique in login systems.
+*/
+
+
+/*=============================================================================
+21. NOT NULL CONSTRAINT
+=============================================================================*/
+
+CREATE TABLE Employee(
+    Name VARCHAR(100) NOT NULL
+);
+
+/*
+Interview Answer:
+Ensures a column cannot have NULL values.
+
+Why We Need It:
+Mandatory fields must always contain data.
+
+Real Scenario:
+Employee name is required in HR databases.
+*/
+
+
+/*=============================================================================
+22. DEFAULT CONSTRAINT
+=============================================================================*/
+
+CREATE TABLE Users(
+    Status VARCHAR(20) DEFAULT 'ACTIVE'
+);
+
+/*
+Interview Answer:
+Assigns a default value when no value is provided during insert.
+
+Why We Need It:
+To reduce repetitive data entry.
+
+Real Scenario:
+New users are automatically set to ACTIVE status.
+*/
+
+
+/*=============================================================================
+23. CHECK CONSTRAINT
+=============================================================================*/
+
+CREATE TABLE Employee(
+    Age INT CHECK(Age >= 18)
+);
+
+/*
+Interview Answer:
+Restricts values based on a condition.
+
+Why We Need It:
+To enforce business rules at database level.
+
+Real Scenario:
+Employees must be at least 18 years old.
+*/
+
+
+/*=============================================================================
+24. AUTO_INCREMENT
+=============================================================================*/
+
+CREATE TABLE Customer(
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY
+);
+
+/*
+Interview Answer:
+Automatically generates sequential numeric values.
+
+Why We Need It:
+To avoid manual ID assignment.
+
+Real Scenario:
+Customer IDs are auto-generated during registration.
+*/
+
+
+/*=============================================================================
+25. AGGREGATE FUNCTIONS
+=============================================================================*/
+
+SELECT COUNT(*) FROM Employee;
+SELECT SUM(Salary) FROM Employee;
+SELECT AVG(Salary) FROM Employee;
+SELECT MIN(Salary) FROM Employee;
+SELECT MAX(Salary) FROM Employee;
+
+/*
+Interview Answer:
+Aggregate functions perform calculations on multiple rows and return a single value.
+
+Why We Need It:
+Used in reporting and analytics.
+
+Real Scenario:
+Finding average salary in a company.
+*/
+
+
+/*=============================================================================
+26. GROUP BY
+=============================================================================*/
+
+SELECT Department, COUNT(*)
+FROM Employee
+GROUP BY Department;
+
+/*
+Interview Answer:
+GROUP BY groups rows with same values into summary rows.
+
+Why We Need It:
+Used with aggregate functions for reporting.
+
+Real Scenario:
+Number of employees in each department.
+*/
+
+
+/*=============================================================================
+27. HAVING
+=============================================================================*/
+
+SELECT Department, COUNT(*)
+FROM Employee
+GROUP BY Department
+HAVING COUNT(*) > 5;
+
+/*
+Interview Answer:
+HAVING filters grouped results after aggregation.
+
+Why We Need It:
+To filter aggregated data.
+
+Real Scenario:
+Departments with more than 5 employees.
+*/
+
+
+/*=============================================================================
+28. INNER JOIN
+=============================================================================*/
+
+SELECT *
+FROM Orders o
+INNER JOIN Customers c
+ON o.CustomerID = c.CustomerID;
+
+/*
+Interview Answer:
+Returns only matching records from both tables.
+
+Why We Need It:
+Used to combine related data from normalized tables.
+
+Real Scenario:
+Show customer details with their orders.
+
+Follow-Up:
+Q: What if no match exists?
+A: Row is not included in result.
+*/
+
+
+/*=============================================================================
+29. LEFT JOIN
+=============================================================================*/
+
+SELECT *
+FROM Employee e
+LEFT JOIN Project p
+ON e.ProjectID = p.ProjectID;
+
+/*
+Interview Answer:
+Returns all records from left table and matching records from right table.
+
+Why We Need It:
+To include all primary records even if related data is missing.
+
+Real Scenario:
+Show all employees even if they are not assigned to projects.
+*/
+
+
+/*=============================================================================
+30. RIGHT JOIN
+=============================================================================*/
+
+SELECT *
+FROM Employee e
+RIGHT JOIN Department d
+ON e.DepartmentID = d.DepartmentID;
+
+/*
+Interview Answer:
+Returns all records from right table and matching from left table.
+
+Why We Need It:
+To ensure all records from secondary table are included.
+
+Real Scenario:
+Show all departments even if no employees exist.
+*/
+
+
+/*=============================================================================
+31. SELF JOIN
+=============================================================================*/
+
+SELECT e.Name AS Employee, m.Name AS Manager
+FROM Employee e
+JOIN Employee m
+ON e.ManagerID = m.EmployeeID;
+
+/*
+Interview Answer:
+A table joins with itself.
+
+Why We Need It:
+Used for hierarchical relationships.
+
+Real Scenario:
+Employee-manager relationship mapping.
+*/
+
+
+/*=============================================================================
+32. CROSS JOIN
+=============================================================================*/
+
+SELECT *
+FROM Products
+CROSS JOIN Sizes;
+
+/*
+Interview Answer:
+Returns cartesian product of two tables.
+
+Why We Need It:
+Used when all combinations are required.
+
+Real Scenario:
+Generating all product-size combinations.
+*/
+
+
+/*=============================================================================
+33. UNION
+=============================================================================*/
+
+SELECT Name FROM Employee
+UNION
+SELECT Name FROM Customer;
+
+/*
+Interview Answer:
+Combines results and removes duplicates.
+
+Why We Need It:
+To merge similar datasets.
+
+Real Scenario:
+Combine employee and customer names.
+*/
+
+
+/*=============================================================================
+34. UNION ALL
+=============================================================================*/
+
+SELECT Name FROM Employee
+UNION ALL
+SELECT Name FROM Customer;
+
+/*
+Interview Answer:
+Combines results including duplicates.
+
+Why We Need It:
+Faster than UNION.
+
+Real Scenario:
+Logging combined activity records.
+*/
+
+
+/*=============================================================================
+35. CASE
+=============================================================================*/
+
+SELECT Name,
+CASE
+    WHEN Salary > 100000 THEN 'High'
+    ELSE 'Normal'
+END AS SalaryCategory
+FROM Employee;
+
+/*
+Interview Answer:
+CASE works like IF-ELSE logic in SQL.
+
+Why We Need It:
+To apply conditional logic in queries.
+
+Real Scenario:
+Categorizing employees based on salary.
+*/
+
+
+/*=============================================================================
+36. SUBQUERY
+=============================================================================*/
+
+SELECT *
+FROM Employee
+WHERE Salary > (
+    SELECT AVG(Salary) FROM Employee
+);
+
+/*
+Interview Answer:
+A query inside another query.
+
+Why We Need It:
+To break complex logic into smaller queries.
+
+Real Scenario:
+Find employees earning above average salary.
+*/
+
+
+/*=============================================================================
+37. CORRELATED SUBQUERY
+=============================================================================*/
+
+SELECT *
+FROM Employee e
+WHERE Salary > (
+    SELECT AVG(Salary)
+    FROM Employee
+    WHERE DepartmentID = e.DepartmentID
+);
+
+/*
+Interview Answer:
+Subquery depends on outer query.
+
+Why We Need It:
+Used for row-wise comparisons.
+
+Real Scenario:
+Compare employee salary with department average.
+*/
+
+
+/*=============================================================================
+38. VIEWS
+=============================================================================*/
+
+CREATE VIEW active_employees AS
+SELECT * FROM Employee
+WHERE Status = 'ACTIVE';
+
+/*
+Interview Answer:
+A view is a virtual table based on a query.
+
+Why We Need It:
+To simplify complex queries and improve security.
+
+Real Scenario:
+HR accesses filtered employee data via views.
+*/
+
+
+/*=============================================================================
+39. INDEX
+=============================================================================*/
+
+CREATE INDEX idx_name
+ON Employee(Name);
+
+/*
+Interview Answer:
+Index improves query performance by reducing full table scans.
+
+Why We Need It:
+To speed up search operations on large datasets.
+
+Real Scenario:
+Searching customers by email in large systems.
+
+Follow-Up:
+Q: Does index improve write performance?
+A: No, it slows inserts/updates slightly because index must update.
+*/
+/*=============================================================================
+MYSQL COMPLETE ROADMAP FOR INTERVIEWS + REAL PROJECTS
+PART 3 : ADVANCED (TOPICS 40 - 65)
+=============================================================================*/
+
+/*=============================================================================
+40. CLUSTERED INDEX
+=============================================================================*/
+
+CREATE TABLE Example1(
+    ID INT PRIMARY KEY,
+    Name VARCHAR(100)
+);
+
+/*
+Interview Answer:
+A clustered index determines the physical order of data in a table.
+In MySQL (InnoDB), the primary key automatically becomes the clustered index.
+
+Why We Need It:
+It improves data retrieval speed for primary key-based searches.
+
+Real Scenario:
+Fetching employee details using EmployeeID in HR systems.
+*/
+
+
+/*=============================================================================
+41. NON CLUSTERED INDEX
+=============================================================================*/
+
+CREATE INDEX idx_name ON Employee(Name);
+
+/*
+Interview Answer:
+A non-clustered index is a separate structure from the actual data that
+helps speed up query retrieval.
+
+Why We Need It:
+To optimize searches on non-primary key columns.
+
+Real Scenario:
+Searching customers by email or username in login systems.
+*/
+
+
+/*=============================================================================
+42. COMPOSITE INDEX
+=============================================================================*/
+
+CREATE INDEX idx_name_dept ON Employee(Name, Department);
+
+/*
+Interview Answer:
+A composite index is created on multiple columns together.
+
+Why We Need It:
+To optimize queries that filter using multiple columns.
+
+Real Scenario:
+Filtering employees by department and name together.
+*/
+
+
+/*=============================================================================
+43. COVERING INDEX
+=============================================================================*/
+
+CREATE INDEX idx_cover ON Employee(Name, Salary);
+
+/*
+Interview Answer:
+A covering index contains all columns needed for a query so MySQL
+does not need to access the table.
+
+Why We Need It:
+Improves performance by avoiding table lookup.
+
+Real Scenario:
+Fetching name and salary frequently in reports.
+*/
+
+
+/*=============================================================================
+44. STORED PROCEDURE
+=============================================================================*/
+
+DELIMITER //
+CREATE PROCEDURE GetEmployees()
+BEGIN
+    SELECT * FROM Employee;
+END //
+DELIMITER ;
+
+/*
+Interview Answer:
+A stored procedure is a precompiled set of SQL statements stored in the database.
+
+Why We Need It:
+To reuse logic and improve performance.
+
+Real Scenario:
+Generating monthly employee reports.
+*/
+
+
+/*=============================================================================
+45. FUNCTION
+=============================================================================*/
+
+CREATE FUNCTION GetBonus(salary INT)
+RETURNS INT
+RETURN salary * 0.10;
+
+/*
+Interview Answer:
+A function returns a single value based on input parameters.
+
+Why We Need It:
+To encapsulate reusable logic.
+
+Real Scenario:
+Calculating employee bonus based on salary.
+*/
+
+
+/*=============================================================================
+46. TRIGGER
+=============================================================================*/
+
+CREATE TRIGGER before_insert_employee
+BEFORE INSERT ON Employee
+FOR EACH ROW
+SET NEW.created_at = NOW();
+
+/*
+Interview Answer:
+A trigger automatically executes when a specific event occurs.
+
+Why We Need It:
+To enforce rules automatically.
+
+Real Scenario:
+Auto-adding timestamps during record creation.
+*/
+
+
+/*=============================================================================
+47. CURSOR
+=============================================================================*/
+
+DELIMITER //
+CREATE PROCEDURE ProcessEmployees()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE empName VARCHAR(100);
+
+    DECLARE cur CURSOR FOR SELECT Name FROM Employee;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO empName;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+    END LOOP;
+
+    CLOSE cur;
+END //
+DELIMITER ;
+
+/*
+Interview Answer:
+A cursor is used to process rows one by one.
+
+Why We Need It:
+For row-by-row processing when set-based operations are not enough.
+
+Real Scenario:
+Sending personalized emails to employees.
+*/
+
+
+/*=============================================================================
+48. TRANSACTIONS
+=============================================================================*/
+
+START TRANSACTION;
+
+UPDATE Accounts
+SET Balance = Balance - 1000
+WHERE ID = 1;
+
+UPDATE Accounts
+SET Balance = Balance + 1000
+WHERE ID = 2;
+
+COMMIT;
+
+/*
+Interview Answer:
+A transaction is a group of SQL statements executed as a single unit.
+
+Why We Need It:
+To ensure data consistency and avoid partial updates.
+
+Real Scenario:
+Bank money transfer system.
+
+Follow-Up:
+Q: What if one query fails?
+A: ROLLBACK is used to undo changes.
+*/
+
+
+/*=============================================================================
+49. ACID PROPERTIES
+=============================================================================*/
+
+/*
+Interview Answer:
+ACID ensures reliable transaction processing.
+
+Atomicity: All or nothing execution
+Consistency: Data remains valid
+Isolation: Transactions do not interfere
+Durability: Changes are permanent
+
+Why We Need It:
+To maintain data reliability in critical systems.
+
+Real Scenario:
+Banking and payment systems.
+*/
+
+
+/*=============================================================================
+50. COMMIT
+=============================================================================*/
+
+COMMIT;
+
+/*
+Interview Answer:
+Saves all changes made in a transaction permanently.
+
+Real Scenario:
+Finalizing a successful payment transaction.
+*/
+
+
+/*=============================================================================
+51. ROLLBACK
+=============================================================================*/
+
+ROLLBACK;
+
+/*
+Interview Answer:
+Undoes all changes made in a transaction.
+
+Real Scenario:
+Canceling failed payment operations.
+*/
+
+
+/*=============================================================================
+52. SAVEPOINT
+=============================================================================*/
+
+SAVEPOINT sp1;
+
+/*
+Interview Answer:
+Creates a point within a transaction to rollback partially.
+
+Real Scenario:
+Multi-step order processing system.
+*/
+
+
+/*=============================================================================
+53. ISOLATION LEVELS
+=============================================================================*/
+
+/*
+Interview Answer:
+Defines how transaction changes are visible to other transactions.
+
+Levels:
+Read Uncommitted
+Read Committed
+Repeatable Read
+Serializable
+
+Why We Need It:
+To control concurrency behavior.
+
+Real Scenario:
+Banking systems avoiding dirty reads.
+*/
+
+
+/*=============================================================================
+54. DEADLOCK
+=============================================================================*/
+
+/*
+Interview Answer:
+A deadlock occurs when two transactions wait for each other indefinitely.
+
+Why We Need It:
+To understand and avoid system lock issues.
+
+Real Scenario:
+Two users updating same rows in different order.
+
+Solution:
+Use consistent locking order.
+*/
+
+
+/*=============================================================================
+55. LOCKING
+=============================================================================*/
+
+/*
+Interview Answer:
+Locking controls access to data during transactions.
+
+Types:
+Shared Lock
+Exclusive Lock
+
+Why We Need It:
+To prevent data inconsistency.
+
+Real Scenario:
+Preventing multiple users from updating same account simultaneously.
+*/
+
+
+/*=============================================================================
+56. NORMALIZATION
+=============================================================================*/
+
+/*
+Interview Answer:
+Normalization organizes data to reduce redundancy and improve integrity.
+
+Forms:
+1NF, 2NF, 3NF, BCNF, 4NF, 5NF
+
+Why We Need It:
+To eliminate duplicate data.
+
+Real Scenario:
+Separating customer and order tables.
+*/
+
+
+/*=============================================================================
+57. DENORMALIZATION
+=============================================================================*/
+
+/*
+Interview Answer:
+Denormalization adds redundancy to improve read performance.
+
+Why We Need It:
+To speed up reporting queries.
+
+Real Scenario:
+E-commerce dashboards using pre-joined data.
+*/
+
+
+/*=============================================================================
+58. PARTITIONING
+=============================================================================*/
+
+CREATE TABLE Sales (
+    ID INT,
+    Amount DECIMAL(10,2)
+)
+PARTITION BY RANGE (ID) (
+    PARTITION p1 VALUES LESS THAN (1000),
+    PARTITION p2 VALUES LESS THAN (2000)
+);
+
+/*
+Interview Answer:
+Partitioning divides large tables into smaller parts.
+
+Why We Need It:
+To improve performance on large datasets.
+
+Real Scenario:
+Millions of transaction records split by date or ID.
+*/
+
+
+/*=============================================================================
+59. REPLICATION
+=============================================================================*/
+
+/*
+Interview Answer:
+Replication copies data from one database server to another.
+
+Types:
+Master-Slave
+
+Why We Need It:
+For high availability and read scaling.
+
+Real Scenario:
+Production database with read replicas.
+*/
+
+
+/*=============================================================================
+60. SHARDING
+=============================================================================*/
+
+/*
+Interview Answer:
+Sharding splits data across multiple databases.
+
+Why We Need It:
+To handle very large-scale applications.
+
+Real Scenario:
+Social media platforms distributing user data.
+*/
+
+
+/*=============================================================================
+61. EXPLAIN
+=============================================================================*/
+
+EXPLAIN SELECT * FROM Employee WHERE Email = 'test@gmail.com';
+
+/*
+Interview Answer:
+EXPLAIN shows query execution plan.
+
+Why We Need It:
+To analyze and optimize queries.
+
+Real Scenario:
+Identifying slow queries in production.
+*/
+
+
+/*=============================================================================
+62. QUERY OPTIMIZATION
+=============================================================================*/
+
+/*
+Interview Answer:
+Query optimization improves performance of SQL queries.
+
+Techniques:
+Use indexes
+Avoid SELECT *
+Use proper joins
+Use filtering early
+
+Real Scenario:
+Improving dashboard load time in applications.
+*/
+
+
+/*=============================================================================
+63. CTE (COMMON TABLE EXPRESSION)
+=============================================================================*/
+
+WITH HighSalary AS (
+    SELECT * FROM Employee WHERE Salary > 100000
+)
+SELECT * FROM HighSalary;
+
+/*
+Interview Answer:
+CTE is a temporary result set used within a query.
+
+Why We Need It:
+To simplify complex queries.
+
+Real Scenario:
+Reporting systems with layered queries.
+*/
+
+
+/*=============================================================================
+64. RECURSIVE CTE
+=============================================================================*/
+
+WITH RECURSIVE EmployeeTree AS (
+    SELECT ID, ManagerID FROM Employee WHERE ManagerID IS NULL
+    UNION ALL
+    SELECT e.ID, e.ManagerID
+    FROM Employee e
+    JOIN EmployeeTree et ON e.ManagerID = et.ID
+)
+SELECT * FROM EmployeeTree;
+
+/*
+Interview Answer:
+Recursive CTE is used for hierarchical data.
+
+Why We Need It:
+To process tree-like structures.
+
+Real Scenario:
+Organizational hierarchy.
+*/
+
+
+/*=============================================================================
+65. WINDOW FUNCTIONS
+=============================================================================*/
+
+SELECT Name,
+ROW_NUMBER() OVER (ORDER BY Salary DESC) AS rn
+FROM Employee;
+
+/*
+Interview Answer:
+Window functions perform calculations across a set of rows without collapsing them.
+
+Types:
+ROW_NUMBER, RANK, DENSE_RANK, LEAD, LAG
+
+Why We Need It:
+For analytics and ranking.
+
+Real Scenario:
+Leaderboards and salary ranking systems.
+*/
