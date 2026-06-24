@@ -98,3 +98,22 @@ tablet = SmartDevice("iPad", 42)
 # Using the objects
 print(phone.status())   # Output: iPhone has 85% battery left.
 print(tablet.status())  # Output: iPad has 42% battery left.
+
+
+x = 10
+y = 10
+print(x is y)  # Prints: True (They point to the exact same cached box)
+
+# Now let's try a much larger number outside the cache
+num1 = 9999
+num2 = 9999
+print(num1 is num2)  # Prints: False!
+Why did that happen?
+
+Because 9999 is outside the automatic safety cache, Python behaves differently under the hood:
+
+    For num1 = 9999, Python creates a brand-new box in memory.
+
+    For num2 = 9999, Python says "that number is too big to keep track of sharing," so it creates a second, completely separate box in memory with the value 9999 inside it.
+
+If you check their addresses using hex(id(num1)) and hex(id(num2)), you will see they are completely different! However, if you check num1 == num2, it will still say True because the value inside both boxes is the same.
