@@ -1004,3 +1004,127 @@ Final executive dashboard.
 /*=============================================================================
 
 =============================================================================*/
+
+
+/*=============================================================================
+101. PAGINATION (MOST IMPORTANT MISSING TOPIC)
+=============================================================================*/
+
+/*
+QUESTION:
+How do you implement pagination in SQL to fetch records page by page?
+
+WHAT IT DOES:
+Returns a limited subset of rows using LIMIT + OFFSET.
+
+WHY IT IS USED:
+Prevents loading huge datasets at once and improves performance.
+
+REAL SCENARIO:
+E-commerce product listing pages (Amazon, Flipkart), where users see
+10–20 products per page.
+*/
+
+
+/*=============================================================================
+BASIC PAGINATION
+=============================================================================*/
+
+SELECT *
+FROM products
+ORDER BY product_id
+LIMIT 10 OFFSET 0;
+
+/*
+PAGE 1:
+Fetches first 10 records.
+
+REAL SCENARIO:
+First page of product catalog.
+*/
+
+
+/*=============================================================================
+PAGE 2 PAGINATION
+=============================================================================*/
+
+SELECT *
+FROM products
+ORDER BY product_id
+LIMIT 10 OFFSET 10;
+
+/*
+PAGE 2:
+Skips first 10 and shows next 10 records.
+
+REAL SCENARIO:
+User clicks "Next Page".
+*/
+
+
+/*=============================================================================
+DYNAMIC PAGINATION FORMULA
+=============================================================================*/
+
+/*
+FORMULA:
+LIMIT page_size OFFSET (page_number - 1) * page_size
+*/
+
+
+SELECT *
+FROM products
+ORDER BY product_id
+LIMIT 10 OFFSET (2 - 1) * 10;
+
+/*
+REAL SCENARIO:
+Backend APIs returning paginated results.
+*/
+
+
+/*=============================================================================
+KEYSET PAGINATION (ADVANCED - INTERVIEW FAVORITE)
+=============================================================================*/
+
+/*
+QUESTION:
+How do you optimize pagination for large datasets?
+
+WHAT IT DOES:
+Uses last seen ID instead of OFFSET (faster approach).
+*/
+
+
+SELECT *
+FROM products
+WHERE product_id > 100
+ORDER BY product_id
+LIMIT 10;
+
+/*
+REAL SCENARIO:
+Infinite scroll (Instagram, YouTube feeds).
+*/
+
+
+/*=============================================================================
+COMPARISON (VERY IMPORTANT INTERVIEW POINT)
+=============================================================================*/
+
+/*
+OFFSET PAGINATION:
+- Easy
+- Slow for large data (skips rows)
+
+KEYSET PAGINATION:
+- Fast
+- Scales well
+- Used in production systems
+*/
+
+/*
+INTERVIEW LINE:
+"OFFSET pagination becomes slow on large datasets, so production systems
+prefer keyset pagination using indexed columns."
+*/
