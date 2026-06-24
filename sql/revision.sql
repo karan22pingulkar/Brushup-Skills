@@ -2067,3 +2067,239 @@ Good design ensures performance and scalability.
 Real Scenario:
 E-commerce systems with Users, Orders, Products, Payments, Inventory.
 */
+-- Important IMP
+/*=============================================================================
+MYSQL COMPLETE ROADMAP FOR INTERVIEWS + REAL PROJECTS
+PART 5 : TOP INTERVIEW QUESTIONS + SQL CODING PROBLEMS
+=============================================================================*/
+
+/*=============================================================================
+TOP 10 INTERVIEW QUESTIONS
+=============================================================================*/
+
+/*
+1. Difference between DELETE, DROP, TRUNCATE?
+
+Answer:
+DELETE removes specific rows with WHERE clause and can be rolled back.
+TRUNCATE removes all rows but keeps structure and is faster but not fully logged.
+DROP removes the entire table structure permanently.
+
+Real Scenario:
+DELETE: remove a single user account
+TRUNCATE: clear staging table
+DROP: remove unused table permanently
+*/
+
+
+/*
+2. Difference between WHERE and HAVING?
+
+Answer:
+WHERE filters rows before grouping.
+HAVING filters after GROUP BY is applied.
+
+Real Scenario:
+WHERE: filter employees before aggregation
+HAVING: filter departments after counting employees
+*/
+
+
+/*
+3. Difference between INNER JOIN and LEFT JOIN?
+
+Answer:
+INNER JOIN returns only matching records.
+LEFT JOIN returns all left table records + matched right table records.
+
+Real Scenario:
+INNER JOIN: only customers with orders
+LEFT JOIN: all customers including those without orders
+*/
+
+
+/*
+4. What is an Index?
+
+Answer:
+Index is a database structure that speeds up data retrieval by avoiding full table scans.
+
+Real Scenario:
+Searching users by email in large systems
+*/
+
+
+/*
+5. What is Composite Index?
+
+Answer:
+An index created on multiple columns to optimize multi-column filtering.
+
+Real Scenario:
+Search employees by department and role together
+*/
+
+
+/*
+6. What are ACID properties?
+
+Answer:
+Atomicity, Consistency, Isolation, Durability ensure reliable transactions.
+
+Real Scenario:
+Banking transactions
+*/
+
+
+/*
+7. What causes Deadlock?
+
+Answer:
+When two transactions wait for each other’s locked resources.
+
+Real Scenario:
+Two users updating same accounts in different order
+*/
+
+
+/*
+8. Difference between RANK and DENSE_RANK?
+
+Answer:
+RANK skips numbers after ties.
+DENSE_RANK does not skip numbers.
+
+Real Scenario:
+Sports leaderboard ranking
+*/
+
+
+/*
+9. Explain Normalization.
+
+Answer:
+Normalization organizes data into multiple tables to reduce redundancy.
+
+Real Scenario:
+Separate customer and order tables
+*/
+
+
+/*
+10. How to optimize slow queries?
+
+Answer:
+Use indexes, avoid SELECT *, optimize joins, use LIMIT, analyze with EXPLAIN.
+
+Real Scenario:
+Improving dashboard load time
+*/
+
+
+/*=============================================================================
+SQL CODING PROBLEMS
+=============================================================================*/
+
+/*
+1. SECOND HIGHEST SALARY
+*/
+
+SELECT MAX(Salary)
+FROM Employee
+WHERE Salary < (
+    SELECT MAX(Salary) FROM Employee
+);
+
+
+/*
+2. NTH HIGHEST SALARY
+*/
+
+SELECT Salary
+FROM Employee
+ORDER BY Salary DESC
+LIMIT 1 OFFSET 1;
+
+
+/*
+3. FIND DUPLICATE RECORDS
+*/
+
+SELECT Email, COUNT(*)
+FROM Users
+GROUP BY Email
+HAVING COUNT(*) > 1;
+
+
+/*
+4. DELETE DUPLICATES USING ROW_NUMBER
+*/
+
+WITH CTE AS (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY Email ORDER BY ID) AS rn
+    FROM Users
+)
+DELETE FROM Users
+WHERE ID IN (
+    SELECT ID FROM CTE WHERE rn > 1
+);
+
+
+/*
+5. EMPLOYEES EARNING MORE THAN MANAGER
+*/
+
+SELECT e.Name
+FROM Employee e
+JOIN Employee m
+ON e.ManagerID = m.ID
+WHERE e.Salary > m.Salary;
+
+
+/*
+6. RUNNING TOTAL
+*/
+
+SELECT Name, Salary,
+SUM(Salary) OVER (ORDER BY ID) AS RunningTotal
+FROM Employee;
+
+
+/*
+7. TOP N PER GROUP
+*/
+
+WITH Ranked AS (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY Department ORDER BY Salary DESC) AS rn
+    FROM Employee
+)
+SELECT *
+FROM Ranked
+WHERE rn <= 3;
+
+
+/*
+8. GAPS AND ISLANDS (CONCEPT)
+*/
+
+SELECT * FROM Employee;
+
+
+/*
+9. PIVOT EXAMPLE
+*/
+
+SELECT Department,
+SUM(CASE WHEN Gender = 'M' THEN 1 ELSE 0 END) AS MaleCount,
+SUM(CASE WHEN Gender = 'F' THEN 1 ELSE 0 END) AS FemaleCount
+FROM Employee
+GROUP BY Department;
+
+
+/*
+10. EXPLAIN QUERY PLAN
+*/
+
+EXPLAIN SELECT * FROM Employee WHERE ID = 10;
