@@ -1554,3 +1554,516 @@ For analytics and ranking.
 Real Scenario:
 Leaderboards and salary ranking systems.
 */
+/*=============================================================================
+MYSQL COMPLETE ROADMAP FOR INTERVIEWS + REAL PROJECTS
+PART 4 : ADVANCED (TOPICS 66 - 90)
+=============================================================================*/
+
+/*=============================================================================
+66. ROW_NUMBER()
+=============================================================================*/
+
+SELECT Name,
+ROW_NUMBER() OVER (ORDER BY Salary DESC) AS rn
+FROM Employee;
+
+/*
+Interview Answer:
+ROW_NUMBER assigns a unique sequential number to each row based on ordering.
+
+Why We Need It:
+Used for ranking, pagination, and removing duplicates logically.
+
+Real Scenario:
+Assigning ranks to employees based on salary.
+*/
+
+
+/*=============================================================================
+67. RANK()
+=============================================================================*/
+
+SELECT Name,
+RANK() OVER (ORDER BY Salary DESC) AS rnk
+FROM Employee;
+
+/*
+Interview Answer:
+RANK assigns ranking but skips numbers when ties occur.
+
+Why We Need It:
+Used when equal values should share same rank.
+
+Real Scenario:
+Sports leaderboard rankings.
+*/
+
+
+/*=============================================================================
+68. DENSE_RANK()
+=============================================================================*/
+
+SELECT Name,
+DENSE_RANK() OVER (ORDER BY Salary DESC) AS drnk
+FROM Employee;
+
+/*
+Interview Answer:
+DENSE_RANK assigns ranks without skipping numbers.
+
+Why We Need It:
+Used when continuous ranking is required.
+
+Real Scenario:
+Employee salary ranking system.
+*/
+
+
+/*=============================================================================
+69. LEAD()
+=============================================================================*/
+
+SELECT Name,
+LEAD(Salary) OVER (ORDER BY Salary DESC) AS next_salary
+FROM Employee;
+
+/*
+Interview Answer:
+LEAD returns the next row’s value in a result set.
+
+Why We Need It:
+Used for comparing current row with next row.
+
+Real Scenario:
+Salary comparison between employees in ranking.
+*/
+
+
+/*=============================================================================
+70. LAG()
+=============================================================================*/
+
+SELECT Name,
+LAG(Salary) OVER (ORDER BY Salary DESC) AS prev_salary
+FROM Employee;
+
+/*
+Interview Answer:
+LAG returns the previous row’s value in a result set.
+
+Why We Need It:
+Used for historical comparisons.
+
+Real Scenario:
+Comparing current month sales with previous month.
+*/
+
+
+/*=============================================================================
+71. TEMPORARY TABLES
+=============================================================================*/
+
+CREATE TEMPORARY TABLE TempEmp AS
+SELECT * FROM Employee;
+
+/*
+Interview Answer:
+Temporary tables exist only during session and store intermediate results.
+
+Why We Need It:
+Used for complex query breakdowns.
+
+Real Scenario:
+Storing intermediate report data.
+*/
+
+
+/*=============================================================================
+72. JSON DATA TYPE
+=============================================================================*/
+
+CREATE TABLE Users (
+    Info JSON
+);
+
+/*
+Interview Answer:
+JSON data type stores semi-structured data in MySQL.
+
+Why We Need It:
+Useful for flexible schema requirements.
+
+Real Scenario:
+Storing user preferences and settings.
+*/
+
+
+/*=============================================================================
+73. FULL TEXT SEARCH
+=============================================================================*/
+
+CREATE FULLTEXT INDEX idx_desc ON Products(Description);
+
+/*
+Interview Answer:
+Full-text search is used for searching text data efficiently.
+
+Why We Need It:
+Better search than LIKE operator.
+
+Real Scenario:
+E-commerce product search feature.
+*/
+
+
+/*=============================================================================
+74. EVENTS SCHEDULER
+=============================================================================*/
+
+CREATE EVENT delete_logs
+ON SCHEDULE EVERY 1 DAY
+DO DELETE FROM Logs WHERE created_at < NOW() - INTERVAL 30 DAY;
+
+/*
+Interview Answer:
+Events scheduler runs SQL queries automatically at scheduled intervals.
+
+Why We Need It:
+For automation tasks.
+
+Real Scenario:
+Auto-deleting old logs.
+*/
+
+
+/*=============================================================================
+75. BACKUP
+=============================================================================*/
+
+-- mysqldump database_name > backup.sql
+
+/*
+Interview Answer:
+Backup is used to export database data for recovery purposes.
+
+Why We Need It:
+To prevent data loss.
+
+Real Scenario:
+Daily production database backup.
+*/
+
+
+/*=============================================================================
+76. RESTORE
+=============================================================================*/
+
+-- mysql database_name < backup.sql
+
+/*
+Interview Answer:
+Restore is used to import backup data into database.
+
+Why We Need It:
+To recover lost or corrupted data.
+
+Real Scenario:
+Restoring production after failure.
+*/
+
+
+/*=============================================================================
+77. INNODB VS MYISAM
+=============================================================================*/
+
+/*
+Interview Answer:
+
+InnoDB:
+- Supports transactions
+- Foreign keys supported
+- Row-level locking
+
+MyISAM:
+- Faster reads
+- No transactions
+- Table-level locking
+
+Why We Need It:
+To choose correct storage engine.
+
+Real Scenario:
+InnoDB used in banking systems, MyISAM in read-heavy systems.
+*/
+
+
+/*=============================================================================
+78. 2ND HIGHEST SALARY
+=============================================================================*/
+
+SELECT MAX(Salary)
+FROM Employee
+WHERE Salary < (
+    SELECT MAX(Salary) FROM Employee
+);
+
+/*
+Interview Answer:
+Finds second highest salary using subquery.
+
+Why We Need It:
+Common interview question for SQL logic testing.
+
+Real Scenario:
+Payroll systems ranking salaries.
+*/
+
+
+/*=============================================================================
+79. NTH HIGHEST SALARY
+=============================================================================*/
+
+SELECT Salary
+FROM Employee
+ORDER BY Salary DESC
+LIMIT 1 OFFSET 1;
+
+/*
+Interview Answer:
+Fetches Nth highest salary using LIMIT OFFSET.
+
+Why We Need It:
+Used in ranking-based queries.
+
+Real Scenario:
+Leaderboards or ranking systems.
+*/
+
+
+/*=============================================================================
+80. DUPLICATE RECORDS
+=============================================================================*/
+
+SELECT Email, COUNT(*)
+FROM Users
+GROUP BY Email
+HAVING COUNT(*) > 1;
+
+/*
+Interview Answer:
+Finds duplicate records using GROUP BY and HAVING.
+
+Why We Need It:
+Data cleaning and validation.
+
+Real Scenario:
+Detecting duplicate user registrations.
+*/
+
+
+/*=============================================================================
+81. DELETE DUPLICATES
+=============================================================================*/
+
+WITH CTE AS (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY Email ORDER BY ID) AS rn
+    FROM Users
+)
+DELETE FROM Users WHERE ID IN (
+    SELECT ID FROM CTE WHERE rn > 1
+);
+
+/*
+Interview Answer:
+Deletes duplicate records using window function.
+
+Why We Need It:
+To clean data while keeping one record.
+
+Real Scenario:
+Removing duplicate email entries.
+*/
+
+
+/*=============================================================================
+82. EMPLOYEES HIGHER THAN MANAGER
+=============================================================================*/
+
+SELECT e.Name
+FROM Employee e
+JOIN Employee m
+ON e.ManagerID = m.ID
+WHERE e.Salary > m.Salary;
+
+/*
+Interview Answer:
+Compares employee salary with manager using self join.
+
+Why We Need It:
+Used in hierarchical comparisons.
+
+Real Scenario:
+HR performance analysis.
+*/
+
+
+/*=============================================================================
+83. RUNNING TOTAL
+=============================================================================*/
+
+SELECT Name, Salary,
+SUM(Salary) OVER (ORDER BY ID) AS running_total
+FROM Employee;
+
+/*
+Interview Answer:
+Running total calculates cumulative sum over rows.
+
+Why We Need It:
+Used in financial and reporting systems.
+
+Real Scenario:
+Monthly sales accumulation.
+*/
+
+
+/*=============================================================================
+84. TOP N PER GROUP
+=============================================================================*/
+
+WITH Ranked AS (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY Department ORDER BY Salary DESC) AS rn
+    FROM Employee
+)
+SELECT * FROM Ranked WHERE rn <= 3;
+
+/*
+Interview Answer:
+Fetches top N records per group using window functions.
+
+Why We Need It:
+Used in departmental rankings.
+
+Real Scenario:
+Top 3 highest paid employees per department.
+*/
+
+
+/*=============================================================================
+85. GAPS AND ISLANDS
+=============================================================================*/
+
+SELECT * FROM Employee;
+
+/*
+Interview Answer:
+Gaps and islands problem identifies consecutive sequences in data.
+
+Why We Need It:
+Used in time-series and sequence analysis.
+
+Real Scenario:
+Detecting continuous login streaks.
+*/
+
+
+/*=============================================================================
+86. PIVOT
+=============================================================================*/
+
+SELECT Department,
+SUM(CASE WHEN Gender = 'M' THEN 1 ELSE 0 END) AS MaleCount,
+SUM(CASE WHEN Gender = 'F' THEN 1 ELSE 0 END) AS FemaleCount
+FROM Employee
+GROUP BY Department;
+
+/*
+Interview Answer:
+Pivot converts rows into columns for reporting.
+
+Why We Need It:
+Used in dashboards and analytics.
+
+Real Scenario:
+Gender distribution per department.
+*/
+
+
+/*=============================================================================
+87. DYNAMIC SQL
+=============================================================================*/
+
+SET @sql = 'SELECT * FROM Employee';
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+/*
+Interview Answer:
+Dynamic SQL builds queries at runtime.
+
+Why We Need It:
+For flexible query execution.
+
+Real Scenario:
+Custom report generation systems.
+*/
+
+
+/*=============================================================================
+88. EXECUTION PLAN
+=============================================================================*/
+
+EXPLAIN SELECT * FROM Employee WHERE ID = 10;
+
+/*
+Interview Answer:
+Execution plan shows how MySQL executes a query.
+
+Why We Need It:
+For query optimization.
+
+Real Scenario:
+Debugging slow queries in production.
+*/
+
+
+/*=============================================================================
+89. QUERY CACHE
+=============================================================================*/
+
+/*
+Interview Answer:
+Query cache stores results of queries for faster reuse (deprecated in modern MySQL versions).
+
+Why We Need It:
+To improve read performance in older systems.
+
+Real Scenario:
+Frequently executed read-only queries.
+*/
+
+
+/*=============================================================================
+90. DATABASE DESIGN
+=============================================================================*/
+
+/*
+Interview Answer:
+Database design is the process of structuring tables, relationships,
+and constraints to ensure efficiency and scalability.
+
+Key Components:
+- Primary Keys
+- Foreign Keys
+- Normalization
+- Indexing
+
+Why We Need It:
+Good design ensures performance and scalability.
+
+Real Scenario:
+E-commerce systems with Users, Orders, Products, Payments, Inventory.
+*/
