@@ -1,318 +1,255 @@
-/*=============================================================================
-FULL 100 SQL INTERVIEW PROBLEMS (51 - 100)
-WITH INDEX TAGS FOR SEARCHING
-PART 2 (ADVANCED LEVEL)
-=============================================================================*/
 
 /*=============================================================================
-[INDEX: PAGINATION | LIMIT]
-51. NTH HIGHEST SALARY (GENERIC)
+SQL INTERVIEW QUESTIONS (51 - 100)
+FULL DETAIL + QUESTION + MEANING + REAL SCENARIO
 =============================================================================*/
 
-SELECT DISTINCT salary
-FROM employee
-ORDER BY salary DESC
-LIMIT 1 OFFSET 2;
+
+/*=============================================================================
+51. FIND USERS WITH NO LOGIN HISTORY
+=============================================================================*/
 
 /*
-Interview:
-Fetch Nth highest salary using LIMIT OFFSET.
+QUESTION:
+Find users who have never logged into the system.
 
-Real Scenario:
-Leaderboard pagination systems.
+WHAT IT DOES:
+Returns users missing in login table.
 */
-
-
-/*=============================================================================
-[INDEX: STRING | PATTERN]
-52. FIND USERS STARTING WITH A
-=============================================================================*/
-
-SELECT *
-FROM users
-WHERE name LIKE 'A%';
-
-/*
-Interview:
-String pattern matching.
-
-Real Scenario:
-Search autocomplete systems.
-*/
-
-
-/*=============================================================================
-[INDEX: STRING | PATTERN]
-53. FIND USERS ENDING WITH SON
-=============================================================================*/
-
-SELECT *
-FROM users
-WHERE name LIKE '%son';
-
-/*
-Interview:
-Suffix-based search.
-
-Real Scenario:
-CRM filtering.
-*/
-
-
-/*=============================================================================
-[INDEX: STRING | SEARCH]
-54. EMAIL DOMAIN FILTER
-=============================================================================*/
-
-SELECT *
-FROM users
-WHERE email LIKE '%@gmail.com';
-
-/*
-Interview:
-Domain-based filtering.
-
-Real Scenario:
-User segmentation.
-*/
-
-
-/*=============================================================================
-[INDEX: DATE | FILTER]
-55. LAST 7 DAYS ORDERS
-=============================================================================*/
-
-SELECT *
-FROM orders
-WHERE order_date >= CURDATE() - INTERVAL 7 DAY;
-
-/*
-Interview:
-Time-based filtering.
-
-Real Scenario:
-Recent activity dashboard.
-*/
-
-
-/*=============================================================================
-[INDEX: DATE | ANALYTICS]
-56. ORDERS THIS MONTH
-=============================================================================*/
-
-SELECT *
-FROM orders
-WHERE MONTH(order_date) = MONTH(CURDATE());
-
-/*
-Interview:
-Monthly filtering.
-
-Real Scenario:
-Sales reports.
-*/
-
-
-/*=============================================================================
-[INDEX: JOIN | LEFT JOIN]
-57. USERS WITHOUT ORDERS
-=============================================================================*/
 
 SELECT u.*
 FROM users u
-LEFT JOIN orders o ON u.user_id = o.user_id
-WHERE o.user_id IS NULL;
+LEFT JOIN logins l
+ON u.user_id = l.user_id
+WHERE l.user_id IS NULL;
 
 /*
-Interview:
-Anti-join pattern.
-
-Real Scenario:
-Inactive users.
+REAL SCENARIO:
+Identify inactive users in SaaS or apps.
 */
 
 
 /*=============================================================================
-[INDEX: JOIN | INNER]
-58. USERS WITH ORDERS ONLY
+52. FIND USERS WHO LOGGED IN AT LEAST ONCE
 =============================================================================*/
+
+/*
+QUESTION:
+Find users who have logged in at least once.
+
+WHAT IT DOES:
+Returns users present in login table.
+*/
 
 SELECT DISTINCT u.*
 FROM users u
-INNER JOIN orders o ON u.user_id = o.user_id;
+JOIN logins l
+ON u.user_id = l.user_id;
 
 /*
-Interview:
-Matching records only.
-
-Real Scenario:
-Active customers.
+REAL SCENARIO:
+Active user tracking.
 */
 
 
 /*=============================================================================
-[INDEX: WINDOW | RANK]
-59. TOP 1 PRODUCT PER CATEGORY
+53. FIND FIRST LOGIN DATE PER USER
 =============================================================================*/
-
-WITH ranked AS (
-    SELECT *,
-    ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn
-    FROM products
-)
-SELECT * FROM ranked WHERE rn = 1;
 
 /*
-Interview:
-Top per group.
+QUESTION:
+Find the first login date of each user.
 
-Real Scenario:
-E-commerce ranking.
+WHAT IT DOES:
+Gets earliest login per user.
 */
 
-
-/*=============================================================================
-[INDEX: WINDOW | RANK]
-60. SECOND HIGHEST PER CATEGORY
-=============================================================================*/
-
-WITH ranked AS (
-    SELECT *,
-    ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn
-    FROM products
-)
-SELECT * FROM ranked WHERE rn = 2;
-
-/*
-Interview:
-Nth item per group.
-*/
-
-
-/*=============================================================================
-[INDEX: WINDOW | RUNNING]
-61. RUNNING TOTAL SALES
-=============================================================================*/
-
-SELECT order_date,
-SUM(total_amount) OVER (ORDER BY order_date) AS running_total
-FROM orders;
-
-/*
-Interview:
-Cumulative analytics.
-*/
-
-
-/*=============================================================================
-[INDEX: WINDOW | DIFFERENCE]
-62. DAY OVER DAY SALES CHANGE
-=============================================================================*/
-
-SELECT order_date, total_amount,
-total_amount - LAG(total_amount) OVER (ORDER BY order_date) AS diff
-FROM orders;
-
-/*
-Interview:
-Trend comparison.
-*/
-
-
-/*=============================================================================
-[INDEX: WINDOW | LEAD]
-63. NEXT DAY SALES COMPARISON
-=============================================================================*/
-
-SELECT order_date, total_amount,
-LEAD(total_amount) OVER (ORDER BY order_date) AS next_day
-FROM orders;
-
-/*
-Interview:
-Forward comparison.
-*/
-
-
-/*=============================================================================
-[INDEX: NULL | CLEAN]
-64. REPLACE NULL WITH ZERO
-=============================================================================*/
-
-SELECT COALESCE(total_amount, 0)
-FROM orders;
-
-/*
-Interview:
-NULL handling.
-*/
-
-
-/*=============================================================================
-[INDEX: NULL | CHECK]
-65. COUNT NULLS IN COLUMN
-=============================================================================*/
-
-SELECT SUM(CASE WHEN email IS NULL THEN 1 ELSE 0 END)
-FROM users;
-
-/*
-Interview:
-Data quality check.
-*/
-
-
-/*=============================================================================
-[INDEX: AGGREGATE | BUSINESS]
-66. TOTAL ORDERS PER USER
-=============================================================================*/
-
-SELECT user_id, COUNT(*)
-FROM orders
+SELECT user_id,
+MIN(login_date) AS first_login
+FROM logins
 GROUP BY user_id;
 
 /*
-Interview:
-Customer activity.
+REAL SCENARIO:
+User onboarding analysis.
 */
 
 
 /*=============================================================================
-[INDEX: AGGREGATE | BUSINESS]
-67. USERS WITH MORE THAN 5 ORDERS
+54. FIND LAST LOGIN DATE PER USER
 =============================================================================*/
-
-SELECT user_id, COUNT(*)
-FROM orders
-GROUP BY user_id
-HAVING COUNT(*) > 5;
 
 /*
-Interview:
-Engagement filtering.
+QUESTION:
+Find most recent login of each user.
+
+WHAT IT DOES:
+Gets latest login per user.
 */
 
-
-/*=============================================================================
-[INDEX: BUSINESS | VIP]
-68. VIP CUSTOMERS
-=============================================================================*/
-
-SELECT user_id, SUM(total_amount) AS spend
-FROM orders
-GROUP BY user_id
-HAVING SUM(total_amount) > 10000;
+SELECT user_id,
+MAX(login_date) AS last_login
+FROM logins
+GROUP BY user_id;
 
 /*
-Interview:
-High value users.
+REAL SCENARIO:
+Retention tracking.
 */
 
 
 /*=============================================================================
-[INDEX: SALES | PRODUCT]
-69. TOP SELLING PRODUCT
+55. USERS WHO NEVER PLACED ORDER
 =============================================================================*/
+
+/*
+QUESTION:
+Find users who never placed any order.
+
+WHAT IT DOES:
+Anti-join on orders table.
+*/
+
+SELECT u.*
+FROM users u
+LEFT JOIN orders o
+ON u.user_id = o.user_id
+WHERE o.user_id IS NULL;
+
+/*
+REAL SCENARIO:
+Inactive customer detection.
+*/
+
+
+/*=============================================================================
+56. ORDERS WITHOUT PAYMENT
+=============================================================================*/
+
+/*
+QUESTION:
+Find orders where payment is missing.
+
+WHAT IT DOES:
+Detects incomplete transactions.
+*/
+
+SELECT o.*
+FROM orders o
+LEFT JOIN payments p
+ON o.order_id = p.order_id
+WHERE p.order_id IS NULL;
+
+/*
+REAL SCENARIO:
+Payment failure tracking.
+*/
+
+
+/*=============================================================================
+57. PAYMENT FAILURE RATE
+=============================================================================*/
+
+/*
+QUESTION:
+Find count of successful vs failed payments.
+
+WHAT IT DOES:
+Groups payment status.
+*/
+
+SELECT status, COUNT(*)
+FROM payments
+GROUP BY status;
+
+/*
+REAL SCENARIO:
+Financial monitoring dashboard.
+*/
+
+
+/*=============================================================================
+58. TOTAL REVENUE FROM SUCCESSFUL PAYMENTS
+=============================================================================*/
+
+/*
+QUESTION:
+Calculate revenue from successful payments only.
+
+WHAT IT DOES:
+Filters successful transactions.
+*/
+
+SELECT SUM(amount)
+FROM payments
+WHERE status = 'SUCCESS';
+
+/*
+REAL SCENARIO:
+Accurate revenue calculation.
+*/
+
+
+/*=============================================================================
+59. TOP PAYMENT METHOD
+=============================================================================*/
+
+/*
+QUESTION:
+Find most used payment method.
+
+WHAT IT DOES:
+Counts payment methods.
+*/
+
+SELECT payment_method, COUNT(*)
+FROM payments
+GROUP BY payment_method
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+
+/*
+REAL SCENARIO:
+Business payment preference analysis.
+*/
+
+
+/*=============================================================================
+60. USERS WITH HIGHEST PAYMENT FAILURE
+=============================================================================*/
+
+/*
+QUESTION:
+Find users with most failed payments.
+
+WHAT IT DOES:
+Joins orders and payments.
+*/
+
+SELECT o.user_id, COUNT(*) AS failed
+FROM orders o
+JOIN payments p ON o.order_id = p.order_id
+WHERE p.status = 'FAILED'
+GROUP BY o.user_id
+ORDER BY failed DESC;
+
+/*
+REAL SCENARIO:
+Fraud or payment issue detection.
+*/
+
+
+/*=============================================================================
+61. TOP SELLING PRODUCT BY QUANTITY
+=============================================================================*/
+
+/*
+QUESTION:
+Find product sold in highest quantity.
+
+WHAT IT DOES:
+Sums quantity per product.
+*/
 
 SELECT product_id, SUM(quantity) AS qty
 FROM order_items
@@ -321,15 +258,22 @@ ORDER BY qty DESC
 LIMIT 1;
 
 /*
-Interview:
-Demand tracking.
+REAL SCENARIO:
+Inventory planning.
 */
 
 
 /*=============================================================================
-[INDEX: SALES | REVENUE]
-70. TOP REVENUE PRODUCT
+62. TOP REVENUE PRODUCT
 =============================================================================*/
+
+/*
+QUESTION:
+Find product with highest revenue.
+
+WHAT IT DOES:
+Calculates total sales value.
+*/
 
 SELECT product_id,
 SUM(quantity * price) AS revenue
@@ -339,188 +283,203 @@ ORDER BY revenue DESC
 LIMIT 1;
 
 /*
-Interview:
-Revenue optimization.
+REAL SCENARIO:
+Profit optimization.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | KPI]
-71. AVERAGE ORDER VALUE
+63. PRODUCTS NEVER PURCHASED
 =============================================================================*/
 
-SELECT AVG(total_amount) FROM orders;
+/*
+QUESTION:
+Find products that were never sold.
+
+WHAT IT DOES:
+LEFT JOIN mismatch.
+*/
+
+SELECT p.*
+FROM products p
+LEFT JOIN order_items oi
+ON p.product_id = oi.product_id
+WHERE oi.product_id IS NULL;
 
 /*
-Interview:
+REAL SCENARIO:
+Catalog cleanup.
+*/
+
+
+/*=============================================================================
+64. LOW STOCK ALERT
+=============================================================================*/
+
+/*
+QUESTION:
+Find products with low stock.
+
+WHAT IT DOES:
+Inventory threshold check.
+*/
+
+SELECT *
+FROM products
+WHERE stock < 10;
+
+/*
+REAL SCENARIO:
+Warehouse alert system.
+*/
+
+
+/*=============================================================================
+65. OUT OF STOCK PRODUCTS
+=============================================================================*/
+
+/*
+QUESTION:
+Find products with zero stock.
+
+WHAT IT DOES:
+Checks inventory depletion.
+*/
+
+SELECT *
+FROM products
+WHERE stock = 0;
+
+/*
+REAL SCENARIO:
+Stock management system.
+*/
+
+
+/*=============================================================================
+66. CUSTOMER LIFETIME VALUE
+=============================================================================*/
+
+/*
+QUESTION:
+Find total spend per customer.
+
+WHAT IT DOES:
+Aggregates user spending.
+*/
+
+SELECT user_id,
+SUM(total_amount) AS clv
+FROM orders
+GROUP BY user_id;
+
+/*
+REAL SCENARIO:
+Customer segmentation.
+*/
+
+
+/*=============================================================================
+67. AVERAGE ORDER VALUE
+=============================================================================*/
+
+/*
+QUESTION:
+Find average order value.
+
+WHAT IT DOES:
+Mean order calculation.
+*/
+
+SELECT AVG(total_amount)
+FROM orders;
+
+/*
+REAL SCENARIO:
 Business KPI.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | KPI]
-72. TOTAL REVENUE
+68. DAILY SALES REPORT
 =============================================================================*/
 
-SELECT SUM(total_amount) FROM orders;
+/*
+QUESTION:
+Find total sales per day.
+
+WHAT IT DOES:
+Groups revenue daily.
+*/
+
+SELECT order_date,
+SUM(total_amount)
+FROM orders
+GROUP BY order_date;
 
 /*
-Interview:
-Revenue calculation.
+REAL SCENARIO:
+Dashboard reporting.
 */
 
 
 /*=============================================================================
-[INDEX: TIME | TREND]
-73. MONTHLY SALES
+69. MONTHLY SALES REPORT
 =============================================================================*/
 
-SELECT MONTH(order_date), SUM(total_amount)
+/*
+QUESTION:
+Find total sales per month.
+
+WHAT IT DOES:
+Monthly aggregation.
+*/
+
+SELECT MONTH(order_date),
+SUM(total_amount)
 FROM orders
 GROUP BY MONTH(order_date);
 
 /*
-Interview:
-Monthly trend.
+REAL SCENARIO:
+Financial reporting.
 */
 
 
 /*=============================================================================
-[INDEX: TIME | TREND]
-74. YEARLY SALES
+70. YEARLY SALES REPORT
 =============================================================================*/
 
-SELECT YEAR(order_date), SUM(total_amount)
+/*
+QUESTION:
+Find yearly revenue.
+
+WHAT IT DOES:
+Year-wise aggregation.
+*/
+
+SELECT YEAR(order_date),
+SUM(total_amount)
 FROM orders
 GROUP BY YEAR(order_date);
 
 /*
-Interview:
-Yearly comparison.
+REAL SCENARIO:
+Annual business report.
 */
 
 
 /*=============================================================================
-[INDEX: JOIN | COMPLEX]
-75. FULL ORDER DETAILS
+71. CUSTOMER SEGMENTATION
 =============================================================================*/
-
-SELECT o.order_id, u.name, p.name
-FROM orders o
-JOIN users u ON o.user_id = u.user_id
-JOIN order_items oi ON o.order_id = oi.order_id
-JOIN products p ON oi.product_id = p.product_id;
 
 /*
-Interview:
-Multi-table joins.
+QUESTION:
+Divide customers into VIP, LOYAL, NEW.
+
+WHAT IT DOES:
+Case-based classification.
 */
-
-
-/*=============================================================================
-[INDEX: JOIN | LEFT]
-76. PRODUCTS NEVER SOLD
-=============================================================================*/
-
-SELECT p.*
-FROM products p
-LEFT JOIN order_items oi ON p.product_id = oi.product_id
-WHERE oi.product_id IS NULL;
-
-/*
-Interview:
-Unpurchased products.
-*/
-
-
-/*=============================================================================
-[INDEX: CLEANING | DUPLICATES]
-77. FIND DUPLICATE USERS
-=============================================================================*/
-
-SELECT email, COUNT(*)
-FROM users
-GROUP BY email
-HAVING COUNT(*) > 1;
-
-/*
-Interview:
-Duplicate detection.
-*/
-
-
-/*=============================================================================
-[INDEX: CLEANING | DUPLICATES]
-78. REMOVE DUPLICATES
-=============================================================================*/
-
-WITH cte AS (
-    SELECT *,
-    ROW_NUMBER() OVER (PARTITION BY email ORDER BY user_id) AS rn
-    FROM users
-)
-DELETE FROM users
-WHERE user_id IN (SELECT user_id FROM cte WHERE rn > 1);
-
-/*
-Interview:
-Data deduplication.
-*/
-
-
-/*=============================================================================
-[INDEX: SUBQUERY | ANALYTICS]
-79. ABOVE AVERAGE PRICE PRODUCTS
-=============================================================================*/
-
-SELECT *
-FROM products
-WHERE price > (SELECT AVG(price) FROM products);
-
-/*
-Interview:
-Benchmark comparison.
-*/
-
-
-/*=============================================================================
-[INDEX: CORRELATED | ANALYTICS]
-80. CATEGORY ABOVE AVG PRICE
-=============================================================================*/
-
-SELECT *
-FROM products p
-WHERE price > (
-    SELECT AVG(price)
-    FROM products
-    WHERE category = p.category
-);
-
-/*
-Interview:
-Advanced correlation.
-*/
-
-
-/*=============================================================================
-[INDEX: STRING | SEARCH]
-81. SEARCH PRODUCTS CONTAINING 'PRO'
-=============================================================================*/
-
-SELECT *
-FROM products
-WHERE name LIKE '%pro%';
-
-/*
-Interview:
-Search feature.
-*/
-
-
-/*=============================================================================
-[INDEX: BUSINESS | SEGMENT]
-82. CUSTOMER SEGMENTATION
-=============================================================================*/
 
 SELECT user_id,
 CASE
@@ -532,144 +491,336 @@ FROM orders
 GROUP BY user_id;
 
 /*
-Interview:
-Marketing segmentation.
+REAL SCENARIO:
+Marketing campaigns.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | CLV]
-83. CUSTOMER LIFETIME VALUE
+72. TOP 5 CUSTOMERS
 =============================================================================*/
 
-SELECT user_id, SUM(total_amount) AS clv
+/*
+QUESTION:
+Find top 5 customers by spending.
+
+WHAT IT DOES:
+Ranks customers by revenue.
+*/
+
+SELECT user_id,
+SUM(total_amount) AS spent
+FROM orders
+GROUP BY user_id
+ORDER BY spent DESC
+LIMIT 5;
+
+/*
+REAL SCENARIO:
+VIP program.
+*/
+
+
+/*=============================================================================
+73. ORDER FREQUENCY PER USER
+=============================================================================*/
+
+/*
+QUESTION:
+Find how many orders each user placed.
+
+WHAT IT DOES:
+Counts orders per user.
+*/
+
+SELECT user_id,
+COUNT(*) AS order_count
 FROM orders
 GROUP BY user_id;
 
 /*
-Interview:
-Customer value.
+REAL SCENARIO:
+Engagement tracking.
 */
 
 
 /*=============================================================================
-[INDEX: INVENTORY]
-84. LOW STOCK ALERT
+74. REPEAT CUSTOMERS
+=============================================================================*/
+
+/*
+QUESTION:
+Find users who ordered more than once.
+
+WHAT IT DOES:
+Filters active buyers.
+*/
+
+SELECT user_id,
+COUNT(*) AS orders
+FROM orders
+GROUP BY user_id
+HAVING COUNT(*) > 1;
+
+/*
+REAL SCENARIO:
+Retention analysis.
+*/
+
+
+/*=============================================================================
+75. MOST FREQUENT CUSTOMER
+=============================================================================*/
+
+/*
+QUESTION:
+Find user with highest number of orders.
+
+WHAT IT DOES:
+Ranking by order count.
+*/
+
+SELECT user_id,
+COUNT(*) AS cnt
+FROM orders
+GROUP BY user_id
+ORDER BY cnt DESC
+LIMIT 1;
+
+/*
+REAL SCENARIO:
+VIP identification.
+*/
+
+
+/*=============================================================================
+76. RUNNING TOTAL SALES
+=============================================================================*/
+
+/*
+QUESTION:
+Calculate cumulative sales over time.
+
+WHAT IT DOES:
+Window sum over order date.
+*/
+
+SELECT order_date,
+SUM(total_amount) OVER (ORDER BY order_date) AS running_total
+FROM orders;
+
+/*
+REAL SCENARIO:
+Revenue tracking dashboard.
+*/
+
+
+/*=============================================================================
+77. DAY OVER DAY DIFFERENCE
+=============================================================================*/
+
+/*
+QUESTION:
+Find change in sales compared to previous day.
+
+WHAT IT DOES:
+Uses LAG function.
+*/
+
+SELECT order_date, total_amount,
+total_amount - LAG(total_amount) OVER (ORDER BY order_date) AS diff
+FROM orders;
+
+/*
+REAL SCENARIO:
+Trend analysis.
+*/
+
+
+/*=============================================================================
+78. NEXT DAY COMPARISON
+=============================================================================*/
+
+SELECT order_date, total_amount,
+LEAD(total_amount) OVER (ORDER BY order_date) AS next_value
+FROM orders;
+
+/*
+REAL SCENARIO:
+Forecasting trends.
+*/
+
+
+/*=============================================================================
+79. FIRST ORDER PER USER
+=============================================================================*/
+
+SELECT *
+FROM (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY order_date) AS rn
+    FROM orders
+) t
+WHERE rn = 1;
+
+/*
+REAL SCENARIO:
+User onboarding analysis.
+*/
+
+
+/*=============================================================================
+80. LAST ORDER PER USER
+=============================================================================*/
+
+SELECT *
+FROM (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY order_date DESC) AS rn
+    FROM orders
+) t
+WHERE rn = 1;
+
+/*
+REAL SCENARIO:
+Retention tracking.
+*/
+
+
+/*=============================================================================
+81. TOP PRODUCTS PER CATEGORY
+=============================================================================*/
+
+SELECT *
+FROM (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn
+    FROM products
+) t
+WHERE rn = 1;
+
+/*
+REAL SCENARIO:
+E-commerce ranking.
+*/
+
+
+/*=============================================================================
+82. ABOVE AVERAGE PRICE PRODUCTS
 =============================================================================*/
 
 SELECT *
 FROM products
-WHERE stock < 10;
+WHERE price > (SELECT AVG(price) FROM products);
 
 /*
-Interview:
-Inventory system.
+REAL SCENARIO:
+Pricing strategy.
 */
 
 
 /*=============================================================================
-[INDEX: INVENTORY]
-85. OUT OF STOCK
+83. CATEGORY WISE ABOVE AVG PRICE
 =============================================================================*/
 
 SELECT *
-FROM products
-WHERE stock = 0;
+FROM products p
+WHERE price > (
+    SELECT AVG(price)
+    FROM products
+    WHERE category = p.category
+);
 
 /*
-Interview:
-Stock monitoring.
+REAL SCENARIO:
+Retail analysis.
 */
 
 
 /*=============================================================================
-[INDEX: GAP | SEQUENCE]
+84. FIND DUPLICATE PRODUCTS
+=============================================================================*/
+
+SELECT name, COUNT(*)
+FROM products
+GROUP BY name
+HAVING COUNT(*) > 1;
+
+/*
+REAL SCENARIO:
+Data cleanup.
+*/
+
+
+/*=============================================================================
+85. REMOVE DUPLICATE PRODUCTS
+=============================================================================*/
+
+WITH cte AS (
+    SELECT *,
+    ROW_NUMBER() OVER (PARTITION BY name ORDER BY product_id) AS rn
+    FROM products
+)
+DELETE FROM products
+WHERE product_id IN (SELECT product_id FROM cte WHERE rn > 1);
+
+/*
+REAL SCENARIO:
+Database cleaning.
+*/
+
+
+/*=============================================================================
 86. FIND MISSING ORDER IDS
 =============================================================================*/
 
-SELECT o1.order_id + 1 AS missing_id
+SELECT o1.order_id + 1 AS missing
 FROM orders o1
 LEFT JOIN orders o2
 ON o1.order_id + 1 = o2.order_id
 WHERE o2.order_id IS NULL;
 
 /*
-Interview:
-Sequence gaps.
+REAL SCENARIO:
+Audit checks.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | FUNNEL]
-87. SALES FUNNEL (CONCEPT)
+87. PRODUCT REVENUE SHARE
 =============================================================================*/
 
-/*
-Views → Cart → Checkout → Payment
+SELECT product_id,
+SUM(quantity * price) * 100 /
+(SELECT SUM(quantity * price) FROM order_items) AS share
+FROM order_items
+GROUP BY product_id;
 
-Interview:
-Conversion tracking.
+/*
+REAL SCENARIO:
+Revenue contribution analysis.
 */
 
 
 /*=============================================================================
-[INDEX: ADVANCED | JSON]
-88. JSON FIELD QUERY (IF SUPPORTED)
-=============================================================================*/
-
-SELECT JSON_EXTRACT(details, '$.price')
-FROM orders;
-
-/*
-Interview:
-Modern DB usage.
-*/
-
-
-/*=============================================================================
-[INDEX: PERFORMANCE | INDEXING]
-89. FIND SLOW QUERY TARGET
-=============================================================================*/
-
-EXPLAIN SELECT * FROM orders WHERE user_id = 10;
-
-/*
-Interview:
-Query optimization.
-*/
-
-
-/*=============================================================================
-[INDEX: PERFORMANCE]
-90. INDEX USAGE EXAMPLE
-=============================================================================*/
-
-CREATE INDEX idx_user_id ON orders(user_id);
-
-/*
-Interview:
-Speed optimization.
-*/
-
-
-/*=============================================================================
-[INDEX: WINDOW | ADVANCED]
-91. MOVING AVERAGE SALES
+88. MOVING AVERAGE SALES
 =============================================================================*/
 
 SELECT order_date,
-AVG(total_amount) OVER (ORDER BY order_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
+AVG(total_amount) OVER (
+    ORDER BY order_date
+    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+) AS moving_avg
 FROM orders;
 
 /*
-Interview:
+REAL SCENARIO:
 Trend smoothing.
 */
 
 
 /*=============================================================================
-[INDEX: WINDOW | ADVANCED]
-92. FIRST VALUE
+89. FIRST VALUE IN SERIES
 =============================================================================*/
 
 SELECT order_date,
@@ -677,14 +828,13 @@ FIRST_VALUE(total_amount) OVER (ORDER BY order_date)
 FROM orders;
 
 /*
-Interview:
+REAL SCENARIO:
 Baseline comparison.
 */
 
 
 /*=============================================================================
-[INDEX: WINDOW | ADVANCED]
-93. LAST VALUE
+90. LAST VALUE IN SERIES
 =============================================================================*/
 
 SELECT order_date,
@@ -692,113 +842,165 @@ LAST_VALUE(total_amount) OVER (ORDER BY order_date)
 FROM orders;
 
 /*
-Interview:
-End value tracking.
+REAL SCENARIO:
+End trend tracking.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | RETENTION]
-94. USER RETENTION (CONCEPT)
+91. NULL VALUE CHECK
 =============================================================================*/
+
+SELECT *
+FROM users
+WHERE email IS NULL;
 
 /*
-Track users returning after first order.
-
-Interview:
-Retention analytics.
+REAL SCENARIO:
+Data quality check.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | COHORT]
-95. COHORT ANALYSIS (CONCEPT)
+92. REPLACE NULL VALUES
 =============================================================================*/
+
+SELECT user_id,
+COALESCE(email, 'no-email')
+FROM users;
 
 /*
-Group users by signup month.
-
-Interview:
-Growth analytics.
+REAL SCENARIO:
+Reporting cleanup.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | REVENUE]
-96. REVENUE PER DAY
+93. COUNT NULL VALUES
 =============================================================================*/
 
-SELECT order_date, SUM(total_amount)
+SELECT COUNT(*) - COUNT(email) AS null_count
+FROM users;
+
+/*
+REAL SCENARIO:
+Data validation.
+*/
+
+
+/*=============================================================================
+94. FIND HIGH VALUE ORDERS
+=============================================================================*/
+
+SELECT *
 FROM orders
-GROUP BY order_date;
+WHERE total_amount > 1000;
 
 /*
-Interview:
-Daily revenue tracking.
+REAL SCENARIO:
+Premium customers.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | RANK]
-97. TOP CUSTOMERS
+95. ORDER VALUE SEGMENTATION
 =============================================================================*/
 
-SELECT user_id, SUM(total_amount) AS spend
-FROM orders
-GROUP BY user_id
-ORDER BY spend DESC
-LIMIT 5;
+SELECT order_id,
+CASE
+    WHEN total_amount > 1000 THEN 'HIGH'
+    WHEN total_amount > 500 THEN 'MEDIUM'
+    ELSE 'LOW'
+END AS category
+FROM orders;
 
 /*
-Interview:
-VIP users.
+REAL SCENARIO:
+Sales classification.
 */
 
 
 /*=============================================================================
-[INDEX: BUSINESS | PRODUCT]
-98. MOST VIEWED PRODUCT (CONCEPT)
+96. FULL CUSTOMER SPENDING
 =============================================================================*/
 
-/*
-Requires logs table.
+SELECT u.user_id, u.name,
+SUM(o.total_amount) AS total_spent
+FROM users u
+JOIN orders o ON u.user_id = o.user_id
+GROUP BY u.user_id, u.name;
 
-Interview:
-Recommendation systems.
+/*
+REAL SCENARIO:
+Final dashboard report.
 */
 
 
 /*=============================================================================
-[INDEX: FINAL]
-99. FULL SALES REPORT
+97. TOP SELLING PRODUCT
 =============================================================================*/
 
-SELECT user_id, SUM(total_amount)
+SELECT product_id,
+SUM(quantity) AS qty
+FROM order_items
+GROUP BY product_id
+ORDER BY qty DESC
+LIMIT 1;
+
+/*
+REAL SCENARIO:
+Demand analysis.
+*/
+
+
+/*=============================================================================
+98. PRODUCT REVENUE LEADER
+=============================================================================*/
+
+SELECT product_id,
+SUM(quantity * price) AS revenue
+FROM order_items
+GROUP BY product_id
+ORDER BY revenue DESC
+LIMIT 1;
+
+/*
+REAL SCENARIO:
+Profit analysis.
+*/
+
+
+/*=============================================================================
+99. FULL SALES SUMMARY
+=============================================================================*/
+
+SELECT user_id,
+SUM(total_amount)
 FROM orders
 GROUP BY user_id;
 
 /*
-Interview:
+REAL SCENARIO:
 Business summary.
 */
 
 
 /*=============================================================================
-[INDEX: FINAL]
-100. END TO END ECOMMERCE QUERY
+100. FINAL E-COMMERCE AGGREGATED REPORT
 =============================================================================*/
 
-SELECT u.user_id, u.name, SUM(o.total_amount) AS total_spent
+SELECT u.user_id, u.name,
+SUM(o.total_amount) AS total_spent
 FROM users u
 JOIN orders o ON u.user_id = o.user_id
-GROUP BY u.user_id;
+GROUP BY u.user_id, u.name;
 
 /*
-Interview:
-Final aggregation query.
+REAL SCENARIO:
+Final executive dashboard.
 */
 
 
 /*=============================================================================
-END OF FULL 100 SQL INTERVIEW PROBLEMS
+
 =============================================================================*/
