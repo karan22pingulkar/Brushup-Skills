@@ -1,37 +1,3 @@
-```sql
-/*=============================================================================
-MYSQL COMPLETE ROADMAP FOR INTERVIEWS + REAL PROJECTS
-PART 1 : BEGINNER (TOPICS 1 - 17)
-=============================================================================*/
-
-/*=============================================================================
-1. WHAT IS MYSQL?
-=============================================================================*/
-
-/*
-Interview Answer:
-
-MySQL is an open-source Relational Database Management System (RDBMS)
-used to store, manage, and retrieve structured data using SQL
-(Structured Query Language). It organizes data into tables consisting
-of rows and columns and supports relationships between tables.
-
-MySQL is widely used because it is reliable, fast, easy to learn,
-and capable of handling applications ranging from small websites to
-large enterprise systems.
-
-Why We Need It:
-
-Applications need a persistent way to store data. MySQL provides a
-secure and efficient mechanism for storing and retrieving data.
-
-Real Scenario:
-
-An e-commerce application stores customers, products, orders, and
-payments in MySQL tables.
-
-Interview Follow-Up:
-
 /*=============================================================================
 MYSQL COMPLETE ROADMAP FOR INTERVIEWS + REAL PROJECTS
 PART 1 : BEGINNER (TOPICS 1 - 17)
@@ -327,11 +293,6 @@ Q: Difference between DELETE and TRUNCATE?
 A: DELETE removes selected rows, TRUNCATE removes all rows faster.
 */
 
-
-/*=============================================================================
-END OF PART 1 (TOPICS 1-17)
-=============================================================================*/
-```
 /*=============================================================================
 MYSQL COMPLETE ROADMAP FOR INTERVIEWS + REAL PROJECTS
 PART 2 : INTERMEDIATE (TOPICS 18 - 39)
