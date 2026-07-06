@@ -1,0 +1,2 @@
+python important tips:
+The command pip freeze > requirements.txt--- saves a list of all currently installed Python packages and their exact versions into a text file 
