@@ -23,9 +23,3 @@ cart = ["python", "java", "cpp"]
 for item in cart:
     cart.remove(item)
 print(cart)
-
-
-cart = ["python", "java", "cpp"]
-
-cart.insert(3, "new1")
-print(cart)
