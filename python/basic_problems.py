@@ -17,3 +17,9 @@ def is_leap(year):
 
 year = int(input())
 print(is_leap(year))
+
+
+cart = ["python", "java", "cpp"]
+for item in cart:
+    cart.remove(item)
+print(cart)
